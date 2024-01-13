@@ -3,6 +3,8 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../models/signup')
 
+const jwt = require('jsonwebtoken')
+
 function ifStringValid(string) {
     if(string == undefined || string.length === 0){
         return true;
@@ -51,8 +53,40 @@ const signUp = async (req,res)=>{
     }
 }
 
+const login = async (req,res)=>{
+    const {email,password} = req.body;
+    try {
+        if(ifStringValid(email) || ifStringValid(password)){
+            return res.status(400).json({message:'bad parameters'})
+        }
+        await User.findAll({where:{email:email}})
+        .then(user=>{
+            bcrypt.compare(password,user[0].password,(err,result)=>{
+                if(err){
+                    throw new Error();
+                }
+                if(result === true){
+                   return res.status(200).json({success:true,message:"login successfully",token:generateWebToken(user[0].id)})
+                }
+                else{
+                    return res.status(400).json({success:false,message:'password is incorrect'})
+                }
+            })
+        })
+        
+    } catch (error) {
+        return res.status(404).json({success:false,message:'user does not exist'})
+        
+    }
+}
+
+function generateWebToken(id){
+    return jwt.sign({userId:id},process.env.TOKEN_SECRET)
+}
+
 module.exports = {
-    signUp
+    signUp,
+    login
 }
 
 
