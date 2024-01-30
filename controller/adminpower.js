@@ -46,7 +46,11 @@ const add = async (req,res)=>{
         //     return res.status(201).json({message:'already a admin'});
 
         // }
+        const name = await User.findOne({where:{id:userid}});
+        const groupWithname = await groupWithName.create({name:name.name,groupId:groupid});
+
         const insert = await userGroup.create({userId:userid,groupId:groupid});
+        
         res.status(200).json({insert,message:"added to group"});
 
     } catch (error) {

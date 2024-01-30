@@ -35,10 +35,22 @@ const getGroupMsg = async (req,res)=>{
         console.log(error);
     }
 }
+const joinedUsers = async (req,res)=>{
+
+    const groupid = req.params.id;
+    try {
+        const users = await nameWithGroup.findAll({where:{groupId:groupid}});
+        console.log(users);
+        res.status(200).json(users);
+    } catch (error) {
+        console.log('error in gettimg username joined in group',error);
+    }
+}
 
 
 
 module.exports = {
     postGroupMsg,
-    getGroupMsg
+    getGroupMsg,
+    joinedUsers
 }
