@@ -9,14 +9,24 @@ const port = 8081;
 const adminRoutes = require('./routes/adminroutes');
 const signUp = require('./routes/signuproutes');
 const messageText = require('./routes/messagebox');
+const group = require('./routes/group');
+const groupMsg = require('./routes/groupMessage');
 const sequelize = require('./util/database')
+
+
 const User = require('./models/signup')
 const Message = require('./models/message');
 const UserGroup = require('./models/usergroup');
 const Group = require('./models/group');
 
-User.belongsToMany(Group,{through:UserGroup});
-Group.belongsToMany(User,{through:UserGroup})
+const groupWithName = require('./models/nameandgroup');
+
+User.belongsToMany(Group, { through: UserGroup, foreignKey: 'userId' });
+Group.belongsToMany(User, { through: UserGroup, foreignKey: 'groupId' });
+
+Group.hasMany(groupWithName);
+groupWithName.belongsTo(Group);
+
 
 User.hasMany(Message);
 Message.belongsTo(User);
@@ -34,6 +44,8 @@ app.use(adminRoutes)
 app.use(signUp);
 
 app.use(messageText);
+app.use(group);
+app.use(groupMsg)
 
 
 sequelize

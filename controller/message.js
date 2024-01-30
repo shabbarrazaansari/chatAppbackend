@@ -20,7 +20,7 @@ const getMessage =async (req,res)=> {
    try {
        const user = await Message.findOne({where:{userid:userId}});
        if(!user){
-        return res.status(400).json({success:false,message:'false authentication'});
+        return res.status(201).json({success:true,message:'no messages'});
        }
        const messages = await Message.findAll({where:{userId:userId}});
        res.status(200).json({success:true,messages});
