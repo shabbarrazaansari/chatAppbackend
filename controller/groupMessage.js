@@ -28,7 +28,7 @@ const getGroupMsg = async (req,res)=>{
         const id = req.params.id;
 
        const arraymsg =  await Message.findAll({where:{groupId:id},attributes:['message']});
-       console.log('all grp msg',arraymsg)
+    //    console.log('all grp msg',arraymsg)
        res.status(200).json(arraymsg);
 
     } catch (error) {
@@ -40,7 +40,7 @@ const joinedUsers = async (req,res)=>{
     const groupid = req.params.id;
     try {
         const users = await nameWithGroup.findAll({where:{groupId:groupid}});
-        console.log(users);
+        // console.log(users);
         res.status(200).json(users);
     } catch (error) {
         console.log('error in gettimg username joined in group',error);

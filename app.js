@@ -7,7 +7,7 @@ const socketIo = require('socket.io');
 dotenv.config();
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socketIo(server,{cors:{origin:'*'}});
 const port = 8081;
 
 const adminRoutes = require('./routes/adminroutes');
@@ -44,9 +44,14 @@ app.use(cors());
 app.use(bodyParser.json({extended:true}));
 io.on('connection',(socket)=>{
   console.log('a user connected');
-  socket.on('chat message',(msg)=>{
-    io.emit('chat message',msg);
+  socket.on('message',(msg)=>{
+    io.emit('message',msg);
+    console.log("socket message",msg);
   });
+  socket.on('group chat',(groupmsg)=>{
+    io.emit('group chat',groupmsg)
+    console.log('group chat>>>',groupmsg)
+  })
   socket.on('disconnect',()=>{
     console.log('user disconnect');
 

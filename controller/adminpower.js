@@ -27,7 +27,7 @@ const search = async (req,res)=>{
         }
 
         const list = await User.findOne({where:{name:name}})
-        console.log('helloo i am most search one',list);
+        // console.log('helloo i am most search one',list);
         res.status(200).json(list); 
     } catch (error) {
         console.log(error);
@@ -64,7 +64,7 @@ const makeAdmin =async(req,res)=> {
         const userid = req.params.id;
         console.log(userid);
         const update = await UserGroup.update({isAdmin:true},{where:{userId:userid},});
-        console.log('update row',update[0]);
+        // console.log('update row',update[0]);
         if(update[0]===0){
             return res.status(501).json({message:'some fault'})
         }

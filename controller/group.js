@@ -20,9 +20,9 @@ const createGroup = async (req,res)=> {
         
     const groupResponse = await Group.create({name:name});
     const username = await User.findOne({where:{id:userid}});
-    console.log('finding username',username);
+    // console.log('finding username',username);
     const groupandname = await groupWithName.create({name:username.name,groupId:groupResponse.id});
-    console.log('group name>>>>',groupandname);
+    // console.log('group name>>>>',groupandname);
 
     const userGroupCreationResult = await UserGroup.create({userId:userid,groupId:groupResponse.id,isAdmin:true})
     res.status(201).json({data:groupResponse,message:'group created'})
@@ -61,11 +61,11 @@ const allGroup = async(req,res)=> {
 
         }
         
-        console.log("group details", arrayGroup);
+        // console.log("group details", arrayGroup);
         const clearGroups = arrayGroup.map(ele=>{
             return {id:ele.id,name:ele.name};
         })
-        console.log("hello original group",clearGroups)
+        // console.log("hello original group",clearGroups)
         res.status(200).json(clearGroups);
 
        
