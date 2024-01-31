@@ -1,9 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const dotenv =require('dotenv')
+const dotenv =require('dotenv');
+const http = require('http');
+const socketIo = require('socket.io');
 dotenv.config();
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 const port = 8081;
 
 const adminRoutes = require('./routes/adminroutes');
@@ -38,6 +42,16 @@ Message.belongsTo(Group);
 
 app.use(cors());
 app.use(bodyParser.json({extended:true}));
+io.on('connection',(socket)=>{
+  console.log('a user connected');
+  socket.on('chat message',(msg)=>{
+    io.emit('chat message',msg);
+  });
+  socket.on('disconnect',()=>{
+    console.log('user disconnect');
+
+  });
+})
 
 app.use(adminRoutes)
 
@@ -53,7 +67,7 @@ sequelize
  .sync()
 .then(result=>{
     
-  app.listen(port,()=>{
+  server.listen(port,()=>{
     console.log('hello i am ',`${port}`)
    })
 
