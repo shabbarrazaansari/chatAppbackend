@@ -6,6 +6,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 dotenv.config();
 const app = express();
+const path = require('path');
 const server = http.createServer(app);
 const io = socketIo(server,{cors:{origin:'*'}});
 const port = 8081;
@@ -37,6 +38,7 @@ Message.belongsTo(User);
 
 Group.hasMany(Message);
 Message.belongsTo(Group);
+app.use(express.static('public'));
 
 
 
